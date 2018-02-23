@@ -31,7 +31,7 @@ SOURCES += main.cpp\
     GUI/people.cpp \
     GUI/place.cpp \
     habitant.cpp \
-    camion.cpp
+    maintenance.cpp
 
 HEADERS  += mainwindow.h \
     algothread.h \
@@ -40,7 +40,7 @@ HEADERS  += mainwindow.h \
     GUI/people.h \
     GUI/place.h \
     habitant.h \
-    camion.h
+    maintenance.h
 
 FORMS    += mainwindow.ui \
     GUI/camion.ui \
