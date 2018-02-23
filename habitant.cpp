@@ -4,3 +4,13 @@ Habitant::Habitant()
 {
 
 }
+
+Habitant::~Habitante()
+{
+
+}
+
+void Habitant::run()
+{
+
+}
