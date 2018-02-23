@@ -3,7 +3,6 @@
 
 #include <QThread>
 #include <QDebug>
-#include <windows.h>
 
 #include "mainwindow.h"
 #include "paramlist.h"

@@ -29,14 +29,18 @@ SOURCES += main.cpp\
     paramlist.cpp \
     GUI/camion.cpp \
     GUI/people.cpp \
-    GUI/place.cpp
+    GUI/place.cpp \
+    habitant.cpp \
+    camion.cpp
 
 HEADERS  += mainwindow.h \
     algothread.h \
     paramlist.h \
     GUI/camion.h \
     GUI/people.h \
-    GUI/place.h
+    GUI/place.h \
+    habitant.h \
+    camion.h
 
 FORMS    += mainwindow.ui \
     GUI/camion.ui \
