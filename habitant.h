@@ -1,11 +1,9 @@
-#ifndef HABITANT_H
-#define HABITANT_H
+#pragma once
 
+#include <QtWidgets>
 
 class Habitant : public QThread
 {
 public:
     Habitant();
 };
-
-#endif // HABITANT_H

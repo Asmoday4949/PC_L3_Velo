@@ -1,11 +1,9 @@
-#ifndef MAINTENANCE_H
-#define MAINTENANCE_H
+#pragma once
 
+#include <QtWidgets>
 
-class Maintenance
+class Maintenance : public QThread
 {
 public:
     Maintenance();
 };
-
-#endif // MAINTENANCE_H
