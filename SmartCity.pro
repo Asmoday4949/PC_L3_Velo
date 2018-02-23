@@ -24,28 +24,34 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     algothread.cpp \
     paramlist.cpp \
     GUI/camion.cpp \
     GUI/people.cpp \
     GUI/place.cpp \
     habitant.cpp \
-    maintenance.cpp
+    maintenance.cpp \
+    initwidget.cpp \
+    citywidget.cpp \
+    mainwindow.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
     algothread.h \
     paramlist.h \
     GUI/camion.h \
     GUI/people.h \
     GUI/place.h \
     habitant.h \
-    maintenance.h
+    maintenance.h \
+    initwidget.h \
+    citywidget.h \
+    mainwindow.h
 
-FORMS    += mainwindow.ui \
+FORMS    += \
     GUI/camion.ui \
     GUI/people.ui \
-    GUI/place.ui
+    GUI/place.ui \
+    initwidget.ui
 
 RESOURCES += \
     icon.qrc

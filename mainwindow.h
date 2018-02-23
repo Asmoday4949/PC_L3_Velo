@@ -1,56 +1,24 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QDebug>
+#include <QtWidgets>
+#include "initwidget.h"
+#include "citywidget.h"
+#include "algothread.h"
 
-#include <QMainWindow>
-#include <QPropertyAnimation>
-
-#include "GUI/people.h"
-#include "GUI/place.h"
-#include "GUI/camion.h"
-
-#include "paramlist.h"
-
-
-namespace Ui {
-class MainWindow;
-}
-
-class MainWindow : public QMainWindow
+class MainWindow : public QWidget
 {
     Q_OBJECT
-
 public:
-    explicit MainWindow(int nbSite,int nbHabitants,int nbBorne,int nbVelo,QWidget *parent = 0);
-    ~MainWindow();
+    explicit MainWindow(QWidget *parent = nullptr);
+
+signals:
 
 public slots:
-     void initSite(int siteId,int nbVelo);
-     void initHabitant(int habId,int initSiteId);
-     void initCamion();
-
-     void setHabitantState(int habId,int param);
-     void setSiteVelo(int idSite,int nbVelo);
-     void startDeplacement(int habId,int initSite,int destSite,int parcourTime);
-
-     void setDepotVelo(int nbVeloDep);
-     void setCamVelo(int nbVeloCam);
-     void startCamionDeplacement(int initSite,int destSite,int parcourTime);
-
+    loadCity();
 private:
-    Ui::MainWindow *ui;
-
-    int nbSite;
-    int nbHabitants;
-    int nbBorne;
-    int nbVelo;
-
-    QList<Place*>* placeList;
-    Place* depot;
-    Camion* camion;
-    QList<People*>* peopleList;
-
+    InitWidget* initWidget;
+    QStackedLayout* mainLayout;
 };
 
 #endif // MAINWINDOW_H

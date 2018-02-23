@@ -4,7 +4,7 @@
 #include <QThread>
 #include <QDebug>
 
-#include "mainwindow.h"
+#include "citywidget.h"
 #include "paramlist.h"
 
 using namespace std;
@@ -13,7 +13,7 @@ class AlgoThread : public QThread
 {
     Q_OBJECT
 public:
-    AlgoThread(MainWindow* mainWindow,int nbSite,int nbHabitants,int nbBorne,int nbVelo);
+    AlgoThread(CityWidget* mainWindow,int nbSite,int nbHabitants,int nbBorne,int nbVelo);
 
 
 

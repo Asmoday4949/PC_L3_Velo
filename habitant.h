@@ -6,7 +6,7 @@ class Habitant : public QThread
 {
 public:
     Habitant();
-    ~Habitante();
+    ~Habitant();
 
 protected:
     void run() override;

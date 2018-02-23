@@ -5,7 +5,7 @@ Habitant::Habitant()
 
 }
 
-Habitant::~Habitante()
+Habitant::~Habitant()
 {
 
 }

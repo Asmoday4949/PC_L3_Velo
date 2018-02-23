@@ -1,6 +1,6 @@
 #include "algothread.h"
 
-AlgoThread::AlgoThread(MainWindow* mainWindow,int _nbSite,int _nbHabitants,int _nbBorne,int _nbVelo)
+AlgoThread::AlgoThread(CityWidget* mainWindow,int _nbSite,int _nbHabitants,int _nbBorne,int _nbVelo)
 {
     nbSite = _nbSite;
     nbHabitants = _nbHabitants;
