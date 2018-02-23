@@ -2,21 +2,22 @@
 #define INITWIDGET_H
 
 #include <QWidget>
+#include "ui_initwidget.h"
 
-namespace Ui {
-class InitWidget;
-}
-
-class InitWidget : public QWidget
+class InitWidget : public QWidget, private Ui_InitWidget
 {
     Q_OBJECT
 
 public:
     explicit InitWidget(QWidget *parent = 0);
+    int getVelos();
+    int getBornesSite();
+    int getSites();
+    int getHabitants();
     ~InitWidget();
+signals:
+    void FormSubmitted();
 
-private:
-    Ui::InitWidget *ui;
 };
 
 #endif // INITWIDGET_H

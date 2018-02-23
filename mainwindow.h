@@ -15,7 +15,7 @@ public:
 signals:
 
 public slots:
-    loadCity();
+    void loadCity();
 private:
     InitWidget* initWidget;
     QStackedLayout* mainLayout;

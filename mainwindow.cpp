@@ -9,18 +9,19 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
 
     this->mainLayout->addWidget(initWidget);
 
-    int nbSite=5;
-    int nbHabitants=15;
-    int nbBorne=5;
-    int nbVelo=30;
-
-
+    connect(this->initWidget, &InitWidget::FormSubmitted, this, &MainWindow::loadCity);
 }
 
-MainWindow::loadCity()
+void MainWindow::loadCity()
 {
+    int nbSite = this->initWidget->getSites();
+    int nbHabitants = this->initWidget->getHabitants();
+    int nbBorne = this->initWidget->getBornesSite();
+    int nbVelo = this->initWidget->getVelos();
+
     CityWidget* cityWidget = new CityWidget(nbSite,nbHabitants,nbBorne,nbVelo);
-    cityWidget->resize(800,600);
+    this->mainLayout->addWidget(cityWidget);
+    this->mainLayout->setCurrentIndex(1);
 
     AlgoThread* algoThread = new AlgoThread(cityWidget,nbSite,nbHabitants,nbBorne,nbVelo);
     algoThread->start();
