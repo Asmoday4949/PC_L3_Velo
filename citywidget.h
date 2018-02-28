@@ -31,7 +31,6 @@ public slots:
      void setDepotVelo(int nbVeloDep);
      void setCamVelo(int nbVeloCam);
      void startCamionDeplacement(int initSite,int destSite,int parcourTime);
-
 private:
     int nbSite;
     int nbHabitants;

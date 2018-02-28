@@ -1,7 +1,13 @@
 #include "algothread.h"
+#include "maintenance.h"
+#include "habitant.h"
+
+AlgoThread* AlgoThread::algoThread = nullptr;
 
 AlgoThread::AlgoThread(CityWidget* mainWindow,int _nbSite,int _nbHabitants,int _nbBorne,int _nbVelo)
 {
+    AlgoThread::algoThread = this;
+
     nbSite = _nbSite;
     nbHabitants = _nbHabitants;
     nbBorne = _nbBorne;
@@ -19,12 +25,49 @@ AlgoThread::AlgoThread(CityWidget* mainWindow,int _nbSite,int _nbHabitants,int _
     connect(this,SIGNAL(startCamionDeplacement(int,int,int)),mainWindow,SLOT(startCamionDeplacement(int,int,int)));
 }
 
+AlgoThread::~AlgoThread()
+{
+    for(int i = 0; i < this->nbHabitants+1; i++)
+    {
+        delete this->arrThreads[i];
+    }
+    delete this->arrThreads;
+}
 
-
-
+AlgoThread *AlgoThread::getAlgoThread()
+{
+    return algoThread;
+}
 
 void AlgoThread::run()
 {
-    //MAKE SOME CHANGE HERE
+    this->arrThreads = new QThread*[this->nbHabitants+1];
+    this->createThreads();
+    this->startThreads();
+    this->waitThreads();
+}
+
+void AlgoThread::createThreads()
+{
+    // create maintenance thread at the last position of the threads array
+    this->arrThreads[this->nbHabitants] = new Maintenance();
+
+    // create habitant threads
+    for(int i = 0; i < nbHabitants; i++)
+    {
+        this->arrThreads[i] = new Habitant();
+    }
+}
+
+void AlgoThread::startThreads()
+{
+    for(int i = 0; i < nbHabitants+1; i++)
+    {
+        this->arrThreads[i]->start();
+    }
+}
+
+void AlgoThread::waitThreads()
+{
 
 }
