@@ -69,5 +69,8 @@ void AlgoThread::startThreads()
 
 void AlgoThread::waitThreads()
 {
-
+    for(int i = 0; i < nbHabitants+1; i++)
+    {
+        this->arrThreads[i]->wait();
+    }
 }

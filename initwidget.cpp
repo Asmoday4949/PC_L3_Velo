@@ -3,7 +3,9 @@
 InitWidget::InitWidget(QWidget *parent) : QWidget(parent)
 {
     setupUi(this);
-    connect(btValider, &QPushButton::clicked, this, &InitWidget::FormSubmitted);
+    connect(this->btValider, &QPushButton::clicked, this, &InitWidget::FormSubmitted);
+    connect(this->sbSites, &QSpinBox::editingFinished, this, &InitWidget::setVelosMin);
+    connect(this->sbBornesSite, &QSpinBox::editingFinished, this, &InitWidget::setVelosMin);
 }
 
 int InitWidget::getVelos()
@@ -29,4 +31,9 @@ int InitWidget::getHabitants()
 InitWidget::~InitWidget()
 {
 
+}
+
+void InitWidget::setVelosMin()
+{
+    this->sbVelos->setMinimum(this->sbSites->value()*(this->sbBornesSite->value()-2)+3);
 }

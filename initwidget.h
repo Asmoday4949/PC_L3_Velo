@@ -15,6 +15,8 @@ public:
     int getSites();
     int getHabitants();
     ~InitWidget();
+public slots:
+    void setVelosMin();
 signals:
     void FormSubmitted();
 
