@@ -73,9 +73,20 @@ void AlgoThread::createThreads()
     this->arrThreads[this->nbHabitants] = new Maintenance();
 
     // create habitant threads
+    int j = 0;
     for(int i = 0; i < nbHabitants; i++)
     {
         this->arrThreads[i] = new Habitant();
+        emit this->initHabitant(i, j);
+
+        if(j >= this->nbSite-1)
+        {
+            j = 0;
+        }
+        else
+        {
+            j++;
+        }
     }
 }
 
