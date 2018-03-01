@@ -52,6 +52,7 @@ void AlgoThread::setVeloPerBorne(int velos)
 void AlgoThread::setVelosAtDepot(int velos)
 {
     emit setDepotVelo(velos);
+    this->nbVelosAtDepot = velos;
 }
 
 void AlgoThread::run()

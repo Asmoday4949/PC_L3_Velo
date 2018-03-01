@@ -1,5 +1,4 @@
-#ifndef ALGOTHREAD_H
-#define ALGOTHREAD_H
+#pragma once
 
 #include <QThread>
 #include <QDebug>
@@ -22,6 +21,8 @@ public:
     int getNbHabitants() { return this->nbHabitants; }
     int getNbBorne() { return this->nbBorne; }
     int getNbVelo() { return this->nbVelo; }
+    int* getNbVelosAtBorne() { return this->nbVelosAtBorne; }
+    int getNbVelosAtDepot() { return this->nbVelosAtDepot; }
 
     //static getters
     static AlgoThread *getAlgoThread();
@@ -42,6 +43,7 @@ protected:
     int nbBorne;
     int nbVelo;
     int* nbVelosAtBorne;
+    int nbVelosAtDepot;
 
     //array to store all threads to start/wait/destroy them with a loop,
     //they are independant after starting so not useful to know which one is what
@@ -61,14 +63,4 @@ signals:
      void setDepotVelo(int nbVeloDep);
      void setCamVelo(int nbVeloCam);
      void startCamionDeplacement(int initSite,int destSite,int parcourTime);
-
-private:
-
-
-
 };
-
-
-
-
-#endif // ALGOTHREAD_H

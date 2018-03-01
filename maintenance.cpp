@@ -4,7 +4,7 @@
 
 Maintenance::Maintenance()
 {
-
+    this->nbVelosInCam = 0;
 }
 
 Maintenance::~Maintenance()
@@ -25,12 +25,18 @@ void Maintenance::run()
 3. Vider la camionnette D <- D + a.
 4. Faire une pause.
 */
+    //depot = nbSite
+    AlgoThread* algo = AlgoThread::getAlgoThread();
 
-    emit AlgoThread::getAlgoThread()->startCamionDeplacement(1,2,5);
+    emit algo->initCamion();
 
     while(true)
     {
+        int nbVelosAtDepot = algo->getNbVelosAtDepot();
+        this->nbVelosInCam = this->maxFromDepot > nbVelosAtDepot ? nbVelosAtDepot : this->maxFromDepot;
+        emit algo->setCamVelo(this->nbVelosInCam);
 
+        while(true) { }
     }
 }
 
