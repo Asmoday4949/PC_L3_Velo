@@ -25,28 +25,33 @@ void Maintenance::run()
 3. Vider la camionnette D <- D + a.
 4. Faire une pause.
 */
-    //depot = nbSite
+    //depot = -1 if moving from depot, nbSite if moving to depot
     AlgoThread* algo = AlgoThread::getAlgoThread();
 
     emit algo->initCamion();
+    this->position = this->idDepot;
 
     while(true)
     {
-        int nbVelosAtDepot = algo->getNbVelosAtDepot();
-        int nbVelosTaken = this->maxFromDepot > nbVelosAtDepot ? nbVelosAtDepot : this->maxFromDepot;
-        this->nbVelosInCam += nbVelosTaken;
-
-        algo->setNbVelosAtDepot(nbVelosAtDepot-nbVelosTaken);
-
-        emit algo->setCamVelo(this->nbVelosInCam);
-        emit algo->setDepotVelo(algo->getNbVelosAtDepot());
+        //depot is not protected by a mutex because there is only one maintenance
+        //and that's the only thread who take and put in the depot
+        this->takeFromDepot();
 
         for(int i = 0; i < algo->getNbSite(); i++)
         {
-
+            int tripTime = AlgoThread::getRandomTripTime();
+            emit algo->startCamionDeplacement(this->position, i, tripTime);
+            this->position = i;
+            this->sleep(tripTime);
         }
 
-        while(true) { }
+        int tripTime = AlgoThread::getRandomTripTime();
+        emit algo->startCamionDeplacement(this->position, algo->getNbSite(), tripTime);
+        this->position = this->idDepot;
+        this->sleep(tripTime);
+
+        this->dropAtDepot();
+        this->sleep(this->breakTime);
     }
 }
 
@@ -56,5 +61,32 @@ void Maintenance::run()
  */
 void Maintenance::setNextSite()
 {
-    this->direction = qrand() % AlgoThread::getAlgoThread()->getNbSite();
+    this->position = qrand() % AlgoThread::getAlgoThread()->getNbSite();
+}
+
+void Maintenance::takeFromDepot()
+{
+    AlgoThread* algo = AlgoThread::getAlgoThread();
+    int nbVelosAtDepot = algo->getNbVelosAtDepot();
+    int nbVelosTaken = this->maxFromDepot > nbVelosAtDepot ? nbVelosAtDepot : this->maxFromDepot;
+    this->nbVelosInCam += nbVelosTaken;
+
+    this->updateDepot(nbVelosAtDepot-nbVelosTaken);
+    emit algo->setCamVelo(this->nbVelosInCam);
+}
+
+void Maintenance::dropAtDepot()
+{
+    AlgoThread* algo = AlgoThread::getAlgoThread();
+
+    this->updateDepot(algo->getNbVelosAtDepot()+this->nbVelosInCam);
+    this->nbVelosInCam = 0;
+    emit algo->setCamVelo(0);
+}
+
+void Maintenance::updateDepot(int nbVelosInDepot)
+{
+    AlgoThread* algo = AlgoThread::getAlgoThread();
+    algo->setNbVelosAtDepot(nbVelosInDepot);
+    emit algo->setDepotVelo(nbVelosInDepot);
 }

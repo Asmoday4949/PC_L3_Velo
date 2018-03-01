@@ -13,11 +13,16 @@ protected:
     void run() override;
 
     void setNextSite();
+    void takeFromDepot();
+    void dropAtDepot();
+    void updateDepot(int nbVelosInDepot);
 
     //members
-    int direction;
+    int position;
     int nbVelosInCam;
 
-    //static members
+    //const members
     const int maxFromDepot = 2;
+    const int idDepot = -1;
+    const int breakTime = 5;
 };
