@@ -41,6 +41,8 @@ protected:
     int nbHabitants;
     int nbBorne;
     int nbVelo;
+    int* nbVelosAtBorne;
+
     //array to store all threads to start/wait/destroy them with a loop,
     //they are independant after starting so not useful to know which one is what
     QThread** arrThreads;

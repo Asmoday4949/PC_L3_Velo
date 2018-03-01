@@ -32,6 +32,7 @@ AlgoThread::~AlgoThread()
         delete this->arrThreads[i];
     }
     delete this->arrThreads;
+    delete this->nbVelosAtBorne;
 }
 
 AlgoThread *AlgoThread::getAlgoThread()
@@ -44,6 +45,7 @@ void AlgoThread::setVeloPerBorne(int velos)
     for(int i = 0; i < this->nbSite; i++)
     {
         emit setSiteVelo(i, velos);
+        this->nbVelosAtBorne[i] = velos;
     }
 }
 
@@ -54,6 +56,7 @@ void AlgoThread::setVelosAtDepot(int velos)
 
 void AlgoThread::run()
 {
+    this->nbVelosAtBorne = new int[this->nbSite];
     this->setVeloPerBorne(this->nbBorne-2);
     this->setVelosAtDepot(this->nbVelo - (this->nbBorne-2)*this->nbSite);
 
