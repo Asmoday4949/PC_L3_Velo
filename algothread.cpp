@@ -39,8 +39,24 @@ AlgoThread *AlgoThread::getAlgoThread()
     return algoThread;
 }
 
+void AlgoThread::setVeloPerBorne(int velos)
+{
+    for(int i = 0; i < this->nbSite; i++)
+    {
+        emit setSiteVelo(i, velos);
+    }
+}
+
+void AlgoThread::setVelosAtDepot(int velos)
+{
+    emit setDepotVelo(velos);
+}
+
 void AlgoThread::run()
 {
+    this->setVeloPerBorne(this->nbBorne-2);
+    this->setVelosAtDepot(this->nbVelo - (this->nbBorne-2)*this->nbSite);
+
     this->arrThreads = new QThread*[this->nbHabitants+1];
     this->createThreads();
     this->startThreads();

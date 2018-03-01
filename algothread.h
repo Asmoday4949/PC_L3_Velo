@@ -27,7 +27,10 @@ public:
     static AlgoThread *getAlgoThread();
 
 protected:
-    //funcitons
+    //logic function
+    void setVeloPerBorne(int velos);
+    void setVelosAtDepot(int velos);
+    //threads related funcitons
     void run();
     void createThreads();
     void startThreads();
