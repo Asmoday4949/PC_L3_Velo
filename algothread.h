@@ -13,6 +13,8 @@ using namespace std;
 
 struct Borne
 {
+    Borne() : condition(), mutex(), dropVeloQueue(), takeVeloQueue() {}
+
     QWaitCondition condition;
     QMutex mutex;
     QQueue<int> dropVeloQueue;
@@ -25,7 +27,6 @@ class AlgoThread : public QThread
 public:
     AlgoThread(CityWidget* mainWindow,int nbSite,int nbHabitants,int nbBorne,int nbVelo);
     virtual ~AlgoThread();
-
 
     //getters
     int getNbSite() { return this->nbSite; }
@@ -48,11 +49,13 @@ protected:
     //logic function
     void setVeloPerBorne(int velos);
     void setVelosAtDepot(int velos);
+
     //threads related funcitons
     void run();
     void createThreads();
     void startThreads();
     void waitThreads();
+    void initBornes();
 
     //members
     int nbSite;
@@ -65,6 +68,7 @@ protected:
     //array to store all threads to start/wait/destroy them with a loop,
     //they are independant after starting so not useful to know which one is what
     QThread** arrThreads;
+    Borne** arrBornes;
 
     //static members
     static AlgoThread* algoThread;

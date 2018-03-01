@@ -95,6 +95,7 @@ void AlgoThread::setVelosAtDepot(int velos)
 
 void AlgoThread::run()
 {
+    this->initBornes();
     this->nbVelosAtBorne = new int[this->nbSite];
     this->setVeloPerBorne(this->nbBorne-2);
     this->setVelosAtDepot(this->nbVelo - (this->nbBorne-2)*this->nbSite);
@@ -146,5 +147,15 @@ void AlgoThread::waitThreads()
     for(int i = 0; i < nbHabitants+1; i++)
     {
         this->arrThreads[i]->wait();
+    }
+}
+
+void AlgoThread::initBornes()
+{
+    this->arrBornes = new Borne*[this->nbBorne];
+
+    for(int i = 0; i < this->nbBorne; i++)
+    {
+        this->arrBornes[i] = new Borne();
     }
 }
