@@ -42,6 +42,7 @@ public:
     //static getters
     static AlgoThread *getAlgoThread();
     static int getRandomTripTime();
+    static int getRandomValue(int max);
     static const int waitingTime = 3; //time of the pause in second
 
 protected:
