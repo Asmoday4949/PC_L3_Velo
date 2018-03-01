@@ -33,8 +33,18 @@ void Maintenance::run()
     while(true)
     {
         int nbVelosAtDepot = algo->getNbVelosAtDepot();
-        this->nbVelosInCam = this->maxFromDepot > nbVelosAtDepot ? nbVelosAtDepot : this->maxFromDepot;
+        int nbVelosTaken = this->maxFromDepot > nbVelosAtDepot ? nbVelosAtDepot : this->maxFromDepot;
+        this->nbVelosInCam += nbVelosTaken;
+
+        algo->setNbVelosAtDepot(nbVelosAtDepot-nbVelosTaken);
+
         emit algo->setCamVelo(this->nbVelosInCam);
+        emit algo->setDepotVelo(algo->getNbVelosAtDepot());
+
+        for(int i = 0; i < algo->getNbSite(); i++)
+        {
+
+        }
 
         while(true) { }
     }
@@ -47,13 +57,4 @@ void Maintenance::run()
 void Maintenance::setNextSite()
 {
     this->direction = qrand() % AlgoThread::getAlgoThread()->getNbSite();
-}
-
-/**
- * @brief Maintenance::getTripTime
- * @return time to wait between one and waitingTime
- */
-int Maintenance::getTripTime()
-{
-    return qrand() % this->waitingTime + 1;
 }

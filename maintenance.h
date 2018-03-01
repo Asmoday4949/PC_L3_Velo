@@ -13,13 +13,11 @@ protected:
     void run() override;
 
     void setNextSite();
-    int getTripTime();
 
     //members
     int direction;
     int nbVelosInCam;
 
     //static members
-    const int waitingTime = 3; //time of the pause in second
     const int maxFromDepot = 2;
 };

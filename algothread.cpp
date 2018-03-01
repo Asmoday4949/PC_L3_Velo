@@ -24,7 +24,9 @@ AlgoThread::AlgoThread(CityWidget* mainWindow,int _nbSite,int _nbHabitants,int _
     connect(this,SIGNAL(setCamVelo(int)),mainWindow,SLOT(setCamVelo(int)));
     connect(this,SIGNAL(startCamionDeplacement(int,int,int)),mainWindow,SLOT(startCamionDeplacement(int,int,int)));
 }
-
+/**
+ * @brief AlgoThread::~AlgoThread destructor
+ */
 AlgoThread::~AlgoThread()
 {
     for(int i = 0; i < this->nbHabitants+1; i++)
@@ -35,9 +37,24 @@ AlgoThread::~AlgoThread()
     delete this->nbVelosAtBorne;
 }
 
+/**
+ * @brief AlgoThread::getAlgoThread
+ * static function that allow to get the main thread from everywhere
+ * @return
+ */
 AlgoThread *AlgoThread::getAlgoThread()
 {
     return algoThread;
+}
+
+/**
+ * @brief AlgoThread::getRandomTripTime
+ * get a random trip time between one and waiting time
+ * @return
+ */
+int AlgoThread::getRandomTripTime()
+{
+    return qrand() % waitingTime + 1;
 }
 
 void AlgoThread::setVeloPerBorne(int velos)

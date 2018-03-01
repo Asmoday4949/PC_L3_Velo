@@ -24,8 +24,13 @@ public:
     int* getNbVelosAtBorne() { return this->nbVelosAtBorne; }
     int getNbVelosAtDepot() { return this->nbVelosAtDepot; }
 
+    //setters
+    void setNbVelosAtDepot(int velos) { this->nbVelosAtDepot = velos; }
+
     //static getters
     static AlgoThread *getAlgoThread();
+    static int getRandomTripTime();
+    static const int waitingTime = 3; //time of the pause in second
 
 protected:
     //logic function
