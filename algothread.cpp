@@ -103,20 +103,10 @@ void AlgoThread::createThreads()
     emit this->initCamion();
 
     // create habitant threads
-    int j = 0;
     for(int i = 0; i < nbHabitants; i++)
     {
         this->arrThreads[i] = new Habitant();
-        emit this->initHabitant(i, j);
-
-        if(j >= this->nbSite-1)
-        {
-            j = 0;
-        }
-        else
-        {
-            j++;
-        }
+        emit this->initHabitant(i, 0);
     }
 }
 
