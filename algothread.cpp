@@ -56,6 +56,17 @@ int AlgoThread::getRandomTripTime()
 {
     return qrand() % waitingTime + 1;
 }
+
+/**
+ * @brief AlgoThread::getRandomSiteId
+ * get a random site id
+ * @return random site id
+ */
+int AlgoThread::getRandomValue(int max)
+{
+    return qrand() % max;
+}
+
 /**
  * @brief AlgoThread::setVeloPerBorne
  * set X velos for each borne
@@ -105,8 +116,10 @@ void AlgoThread::createThreads()
     // create habitant threads
     for(int i = 0; i < nbHabitants; i++)
     {
-        this->arrThreads[i] = new Habitant();
-        emit this->initHabitant(i, 0);
+        int initSiteId = getRandomValue(nbSite);
+
+        this->arrThreads[i] = new Habitant(i, initSiteId);
+        emit this->initHabitant(i, initSiteId);
     }
 }
 
