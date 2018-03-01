@@ -58,12 +58,14 @@ int AlgoThread::getRandomTripTime()
 }
 
 /**
- * @brief AlgoThread::getRandomSiteId
- * get a random site id
- * @return random site id
+ * @brief AlgoThread::getRandomValue
+ * get a random value between 0 and MAX
+ * the seed can be parametred if necessary
+ * @return random value between 0 and MAX
  */
-int AlgoThread::getRandomValue(int max)
+int AlgoThread::getRandomValue(int max, int seed)
 {
+    qsrand(seed);
     return qrand() % max;
 }
 
