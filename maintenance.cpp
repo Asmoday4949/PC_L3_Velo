@@ -28,7 +28,6 @@ void Maintenance::run()
     //depot = -1 if moving from depot, nbSite if moving to depot
     AlgoThread* algo = AlgoThread::getAlgoThread();
 
-    emit algo->initCamion();
     this->position = this->idDepot;
 
     while(true)
@@ -64,17 +63,25 @@ void Maintenance::setNextSite()
     this->position = qrand() % AlgoThread::getAlgoThread()->getNbSite();
 }
 
+/**
+ * @brief Maintenance::takeFromDepot
+ * take the right amount of velos from the depo
+ */
 void Maintenance::takeFromDepot()
 {
     AlgoThread* algo = AlgoThread::getAlgoThread();
     int nbVelosAtDepot = algo->getNbVelosAtDepot();
     int nbVelosTaken = this->maxFromDepot > nbVelosAtDepot ? nbVelosAtDepot : this->maxFromDepot;
     this->nbVelosInCam += nbVelosTaken;
+    emit algo->setCamVelo(this->nbVelosInCam);
 
     this->updateDepot(nbVelosAtDepot-nbVelosTaken);
-    emit algo->setCamVelo(this->nbVelosInCam);
 }
 
+/**
+ * @brief Maintenance::dropAtDepot
+ * drop all of his velos at the depot
+ */
 void Maintenance::dropAtDepot()
 {
     AlgoThread* algo = AlgoThread::getAlgoThread();
@@ -83,7 +90,11 @@ void Maintenance::dropAtDepot()
     this->nbVelosInCam = 0;
     emit algo->setCamVelo(0);
 }
-
+/**
+ * @brief Maintenance::updateDepot
+ * update the number of velos on the UI and the main thread
+ * @param nbVelosInDepot
+ */
 void Maintenance::updateDepot(int nbVelosInDepot)
 {
     AlgoThread* algo = AlgoThread::getAlgoThread();

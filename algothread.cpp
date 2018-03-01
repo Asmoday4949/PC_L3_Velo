@@ -56,7 +56,11 @@ int AlgoThread::getRandomTripTime()
 {
     return qrand() % waitingTime + 1;
 }
-
+/**
+ * @brief AlgoThread::setVeloPerBorne
+ * set X velos for each borne
+ * @param velos
+ */
 void AlgoThread::setVeloPerBorne(int velos)
 {
     for(int i = 0; i < this->nbSite; i++)
@@ -65,7 +69,11 @@ void AlgoThread::setVeloPerBorne(int velos)
         this->nbVelosAtBorne[i] = velos;
     }
 }
-
+/**
+ * @brief AlgoThread::setVelosAtDepot
+ * setter for the number of velos at the depot
+ * @param velos
+ */
 void AlgoThread::setVelosAtDepot(int velos)
 {
     emit setDepotVelo(velos);
@@ -84,10 +92,15 @@ void AlgoThread::run()
     this->waitThreads();
 }
 
+/**
+ * @brief AlgoThread::createThreads
+ * create all the threads and set them at their initial place
+ */
 void AlgoThread::createThreads()
 {
     // create maintenance thread at the last position of the threads array
     this->arrThreads[this->nbHabitants] = new Maintenance();
+    emit this->initCamion();
 
     // create habitant threads
     int j = 0;
@@ -107,6 +120,10 @@ void AlgoThread::createThreads()
     }
 }
 
+/**
+ * @brief AlgoThread::startThreads
+ * start all the threads
+ */
 void AlgoThread::startThreads()
 {
     for(int i = 0; i < nbHabitants+1; i++)
@@ -115,6 +132,10 @@ void AlgoThread::startThreads()
     }
 }
 
+/**
+ * @brief AlgoThread::waitThreads
+ * wait all the threads
+ */
 void AlgoThread::waitThreads()
 {
     for(int i = 0; i < nbHabitants+1; i++)
