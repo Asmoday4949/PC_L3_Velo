@@ -1,12 +1,23 @@
 #pragma once
 
+#include <QMutex>
+#include <QWaitCondition>
 #include <QThread>
 #include <QDebug>
+#include <QQueue>
 
 #include "citywidget.h"
 #include "paramlist.h"
 
 using namespace std;
+
+struct Borne
+{
+    QWaitCondition condition;
+    QMutex mutex;
+    QQueue<int> dropVeloQueue;
+    QQueue<int> takeVeloQueue;
+};
 
 class AlgoThread : public QThread
 {
