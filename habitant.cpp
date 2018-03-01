@@ -17,12 +17,23 @@ void Habitant::run()
 
     int maxSite = algoThread->getNbSite();
     int tripTime = -1;
+    int waitTime = -1;
     int destSiteId = -1;
 
+    while(true)
+    {
+        tripTime = algoThread->getRandomTripTime();
+        waitTime = algoThread->getRandomTripTime();
+        // Different value of seed is used here to get different site !
+        destSiteId = algoThread->getRandomValue(maxSite, id + siteId);
 
-    tripTime = algoThread->getRandomTripTime();
-    destSiteId = algoThread->getRandomValue(maxSite);
+        algoThread->setHabitantState(id, ParamList::BIKE);
+        algoThread->startDeplacement(id, siteId, destSiteId, tripTime);
 
-    algoThread->setHabitantState(id, ParamList::BIKE);
-    algoThread->startDeplacement(id, siteId, destSiteId, tripTime);
+        this->sleep(tripTime);
+        this->siteId = destSiteId;
+
+        algoThread->setHabitantState(id, ParamList::ACTION);
+        //this->sleep(waitTime);
+    }
 }
