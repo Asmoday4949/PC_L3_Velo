@@ -25,7 +25,7 @@ void Habitant::run()
         tripTime = algoThread->getRandomTripTime();
         waitTime = algoThread->getRandomTripTime();
         // Different value of seed is used here to get different site !
-        destSiteId = algoThread->getRandomValue(maxSite, id + siteId);
+        destSiteId = algoThread->getRandomValue(maxSite, QDateTime::currentMSecsSinceEpoch() + id + siteId);
 
         algoThread->setHabitantState(id, ParamList::BIKE);
         algoThread->startDeplacement(id, siteId, destSiteId, tripTime);
