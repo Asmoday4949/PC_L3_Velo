@@ -65,7 +65,10 @@ int AlgoThread::getRandomTripTime()
  */
 int AlgoThread::getRandomValue(int max, int seed)
 {
-    qsrand(seed);
+    // set a special seed if the param. is filled
+    if(seed != -1)
+        qsrand(seed);
+
     return qrand() % max;
 }
 
