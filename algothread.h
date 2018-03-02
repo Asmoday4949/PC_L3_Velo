@@ -13,9 +13,10 @@ using namespace std;
 
 struct Borne
 {
-    Borne() : condition(), mutex(), dropVeloQueue(), takeVeloQueue() {}
+    Borne() : conditionArrive(), conditionLeave(), mutex(), dropVeloQueue(), takeVeloQueue() {}
 
-    QWaitCondition condition;
+    QWaitCondition conditionArrive;
+    QWaitCondition conditionLeave;
     QMutex mutex;
     QQueue<int> dropVeloQueue;
     QQueue<int> takeVeloQueue;
