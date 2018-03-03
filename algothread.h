@@ -11,10 +11,11 @@
 
 using namespace std;
 
-struct Borne
+struct Site
 {
-    Borne() : conditionArrive(), conditionLeave(), mutex(), dropVeloQueue(), takeVeloQueue() {}
+    Site() : velosAtSite(0), conditionArrive(), conditionLeave(), mutex(), dropVeloQueue(), takeVeloQueue() {}
 
+    int velosAtSite;
     QWaitCondition conditionArrive;
     QWaitCondition conditionLeave;
     QMutex mutex;
@@ -34,7 +35,7 @@ public:
     int getNbHabitants() { return this->nbHabitants; }
     int getNbBorne() { return this->nbBorne; }
     int getNbVelo() { return this->nbVelo; }
-    int* getNbVelosAtBorne() { return this->nbVelosAtBorne; }
+    Site** getSites() { return this->arrSites; }
     int getNbVelosAtDepot() { return this->nbVelosAtDepot; }
 
     //setters
@@ -56,20 +57,19 @@ protected:
     void createThreads();
     void startThreads();
     void waitThreads();
-    void initBornes();
+    void initSites();
 
     //members
     int nbSite;
     int nbHabitants;
     int nbBorne;
     int nbVelo;
-    int* nbVelosAtBorne;
+    Site** arrSites;
     int nbVelosAtDepot;
 
     //array to store all threads to start/wait/destroy them with a loop,
     //they are independant after starting so not useful to know which one is what
     QThread** arrThreads;
-    Borne** arrBornes;
 
     //static members
     static AlgoThread* algoThread;

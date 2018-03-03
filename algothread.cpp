@@ -34,7 +34,7 @@ AlgoThread::~AlgoThread()
         delete this->arrThreads[i];
     }
     delete this->arrThreads;
-    delete this->nbVelosAtBorne;
+    delete this->arrSites;
 }
 
 /**
@@ -82,7 +82,7 @@ void AlgoThread::setVeloPerBorne(int velos)
     for(int i = 0; i < this->nbSite; i++)
     {
         emit setSiteVelo(i, velos);
-        this->nbVelosAtBorne[i] = velos;
+        this->arrSites[i]->velosAtSite = velos;
     }
 }
 /**
@@ -98,8 +98,7 @@ void AlgoThread::setVelosAtDepot(int velos)
 
 void AlgoThread::run()
 {
-    this->initBornes();
-    this->nbVelosAtBorne = new int[this->nbSite];
+    this->initSites();
     this->setVeloPerBorne(this->nbBorne-2);
     this->setVelosAtDepot(this->nbVelo - (this->nbBorne-2)*this->nbSite);
 
@@ -153,12 +152,12 @@ void AlgoThread::waitThreads()
     }
 }
 
-void AlgoThread::initBornes()
+void AlgoThread::initSites()
 {
-    this->arrBornes = new Borne*[this->nbBorne];
+    this->arrSites = new Site*[this->nbSite];
 
-    for(int i = 0; i < this->nbBorne; i++)
+    for(int i = 0; i < this->nbSite; i++)
     {
-        this->arrBornes[i] = new Borne();
+        this->arrSites[i] = new Site();
     }
 }
