@@ -14,7 +14,7 @@ Habitant::~Habitant()
 void Habitant::run()
 {
     // initialise random
-    qsrand(id + siteId + QDateTime::currentMSecsSinceEpoch());
+    qsrand(id*20 + siteId + QDateTime::currentMSecsSinceEpoch());
 
     AlgoThread* algoThread = AlgoThread::getAlgoThread();
 
@@ -25,8 +25,10 @@ void Habitant::run()
 
     while(true)
     {
+        this->takeVelo(algoThread);
+
         tripTime = algoThread->getRandomTripTime();
-        waitTime = algoThread->getRandomValue(maxSite);
+        waitTime = algoThread->getRandomTripTime();
 
         do
         {
@@ -35,18 +37,17 @@ void Habitant::run()
         }
         while(siteId == destSiteId);
 
-        emit algoThread->setHabitantState(id, ParamList::BIKE);
         algoThread->startDeplacement(id, siteId, destSiteId, tripTime);
         this->sleep(tripTime);
         this->siteId = destSiteId;
 
-        this->tryDropVelo(algoThread);
+        this->dropVelo(algoThread);
 
         this->sleep(waitTime);
     }
 }
 
-void Habitant::tryDropVelo(AlgoThread *algoThread)
+void Habitant::dropVelo(AlgoThread *algoThread)
 {
     Site* currentSite = algoThread->getSites()[this->siteId];
 
@@ -80,7 +81,38 @@ void Habitant::tryDropVelo(AlgoThread *algoThread)
     emit algoThread->setHabitantState(id, ParamList::ACTION);
 }
 
-void Habitant::tryTakeVelo(AlgoThread *algoThread)
+void Habitant::takeVelo(AlgoThread *algoThread)
 {
+    Site* currentSite = algoThread->getSites()[this->siteId];
 
+    currentSite->mutex.lock();
+    //possible case :
+    //borne empty
+    //borne not empty && queue not empty && !not first
+
+    qDebug() << currentSite->velosAtSite << currentSite->takeVeloQueue;
+    while(currentSite->velosAtSite <= 0
+          || (currentSite->velosAtSite < algoThread->getNbBorne()
+              && !currentSite->takeVeloQueue.isEmpty()
+              && currentSite->takeVeloQueue.head() != this->id))
+    {
+        emit algoThread->setHabitantState(this->id, ParamList::WAIT);
+        if(currentSite->takeVeloQueue.indexOf(this->id) == -1)
+        {
+            currentSite->takeVeloQueue.enqueue(this->id);
+        }
+        currentSite->conditionLeave.wait(&currentSite->mutex);
+    }
+
+    if(!currentSite->takeVeloQueue.isEmpty() && currentSite->takeVeloQueue.head() == this->id)
+    {
+        currentSite->takeVeloQueue.dequeue();
+    }
+    algoThread->addVelosAtSite(-1, currentSite);
+
+    currentSite->conditionArrive.notify_all();
+
+    currentSite->mutex.unlock();
+
+    emit algoThread->setHabitantState(id, ParamList::BIKE);
 }
