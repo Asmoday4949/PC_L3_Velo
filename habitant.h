@@ -11,6 +11,8 @@ public:
 
 protected:
     void run() override;
+    void tryDropVelo(AlgoThread* algoThread);
+    void tryTakeVelo(AlgoThread* algoThread);
 
 private:
     int id;

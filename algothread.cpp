@@ -37,6 +37,12 @@ AlgoThread::~AlgoThread()
     delete this->arrSites;
 }
 
+void AlgoThread::incrementVelosAtSite(Site *site)
+{
+    site->velosAtSite++;
+    emit this->setSiteVelo(site->id, site->velosAtSite);
+}
+
 /**
  * @brief AlgoThread::getAlgoThread
  * static function that allow to get the main thread from everywhere
@@ -63,12 +69,8 @@ int AlgoThread::getRandomTripTime()
  * the seed can be parametred if necessary
  * @return random value between 0 and MAX
  */
-int AlgoThread::getRandomValue(int max, int seed)
+int AlgoThread::getRandomValue(int max)
 {
-    // set a special seed if the param. is filled
-    if(seed != -1)
-        qsrand(seed);
-
     return qrand() % max;
 }
 
@@ -158,6 +160,6 @@ void AlgoThread::initSites()
 
     for(int i = 0; i < this->nbSite; i++)
     {
-        this->arrSites[i] = new Site();
+        this->arrSites[i] = new Site(i);
     }
 }

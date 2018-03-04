@@ -13,8 +13,12 @@ using namespace std;
 
 struct Site
 {
-    Site() : velosAtSite(0), conditionArrive(), conditionLeave(), mutex(), dropVeloQueue(), takeVeloQueue() {}
+    Site(int id) : velosAtSite(0), conditionArrive(), conditionLeave(), mutex(), dropVeloQueue(), takeVeloQueue()
+    {
+        this->id = id;
+    }
 
+    int id;
     int velosAtSite;
     QWaitCondition conditionArrive;
     QWaitCondition conditionLeave;
@@ -37,6 +41,7 @@ public:
     int getNbVelo() { return this->nbVelo; }
     Site** getSites() { return this->arrSites; }
     int getNbVelosAtDepot() { return this->nbVelosAtDepot; }
+    void incrementVelosAtSite(Site* site);
 
     //setters
     void setNbVelosAtDepot(int velos) { this->nbVelosAtDepot = velos; }
@@ -44,7 +49,7 @@ public:
     //static getters
     static AlgoThread *getAlgoThread();
     static int getRandomTripTime();
-    static int getRandomValue(int max, int seed = -1);
+    static int getRandomValue(int max);
     static const int waitingTime = 3; //time of the pause in second
 
 protected:
