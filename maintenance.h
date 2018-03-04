@@ -13,9 +13,11 @@ protected:
     void run() override;
 
     void setNextSite();
-    void takeFromDepot();
+    int takeFromDepot();
     void dropAtDepot();
     void updateDepot(int nbVelosInDepot);
+
+    void work();
 
     //members
     int position;
