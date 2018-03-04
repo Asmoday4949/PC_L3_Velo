@@ -37,7 +37,6 @@ void Habitant::run()
 
         emit algoThread->setHabitantState(id, ParamList::BIKE);
         algoThread->startDeplacement(id, siteId, destSiteId, tripTime);
-
         this->sleep(tripTime);
         this->siteId = destSiteId;
 
@@ -72,7 +71,9 @@ void Habitant::tryDropVelo(AlgoThread *algoThread)
     {
         currentSite->dropVeloQueue.dequeue();
     }
-    algoThread->incrementVelosAtSite(currentSite);
+    algoThread->addVelosAtSite(1, currentSite);
+
+    currentSite->conditionLeave.notify_all();
 
     currentSite->mutex.unlock();
 

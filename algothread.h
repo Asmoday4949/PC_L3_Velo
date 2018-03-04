@@ -41,7 +41,7 @@ public:
     int getNbVelo() { return this->nbVelo; }
     Site** getSites() { return this->arrSites; }
     int getNbVelosAtDepot() { return this->nbVelosAtDepot; }
-    void incrementVelosAtSite(Site* site);
+    void addVelosAtSite(int nbVelos, Site* site);
 
     //setters
     void setNbVelosAtDepot(int velos) { this->nbVelosAtDepot = velos; }

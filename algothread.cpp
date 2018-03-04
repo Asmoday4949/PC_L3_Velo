@@ -37,9 +37,9 @@ AlgoThread::~AlgoThread()
     delete this->arrSites;
 }
 
-void AlgoThread::incrementVelosAtSite(Site *site)
+void AlgoThread::addVelosAtSite(int nbVelos, Site *site)
 {
-    site->velosAtSite++;
+    site->velosAtSite += nbVelos;
     emit this->setSiteVelo(site->id, site->velosAtSite);
 }
 
