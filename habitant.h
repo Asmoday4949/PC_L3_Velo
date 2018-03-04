@@ -13,6 +13,7 @@ protected:
     void run() override;
     void dropVelo(AlgoThread* algoThread);
     void takeVelo(AlgoThread* algoThread);
+    void moveTo(int destSiteId);
 
 private:
     int id;

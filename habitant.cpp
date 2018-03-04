@@ -25,7 +25,6 @@ void Habitant::run()
         this->takeVelo(algoThread);
 
         int destSiteId;
-        int tripTime = algoThread->getRandomTripTime();
 
         do
         {
@@ -35,10 +34,7 @@ void Habitant::run()
         while(siteId == destSiteId);
 
         //move to next site
-        algoThread->threadSafeQDebug(QString("Habitant #%1 moving from site #%2 to site #%3").arg(this->id).arg(siteId).arg(destSiteId));
-        algoThread->startDeplacement(id, siteId, destSiteId, tripTime);
-        this->sleep(tripTime);
-        this->siteId = destSiteId;
+        this->moveTo(destSiteId);
 
         this->dropVelo(algoThread);
 
@@ -137,6 +133,21 @@ void Habitant::takeVelo(AlgoThread *algoThread)
     //notify people that are waiting to drop a velo that a free space is available
     currentSite->conditionArrive.notify_all();
 
-
     emit algoThread->setHabitantState(id, ParamList::BIKE);
+}
+
+/**
+ * @brief Habitant::moveTo
+ * move to siteId
+ * @param siteId
+ */
+void Habitant::moveTo(int destSiteId)
+{
+    AlgoThread* algoThread = AlgoThread::getAlgoThread();
+
+    int tripTime = algoThread->getRandomTripTime();
+    algoThread->threadSafeQDebug(QString("Habitant #%1 moving from site #%2 to site #%3").arg(this->id).arg(siteId).arg(destSiteId));
+    algoThread->startDeplacement(id, siteId, destSiteId, tripTime);
+    this->sleep(tripTime);
+    this->siteId = destSiteId;
 }
