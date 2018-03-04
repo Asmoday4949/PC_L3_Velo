@@ -34,6 +34,9 @@ public:
     AlgoThread(CityWidget* mainWindow,int nbSite,int nbHabitants,int nbBorne,int nbVelo);
     virtual ~AlgoThread();
 
+    //debug
+    void threadSafeQDebug(QString text);
+
     //getters
     int getNbSite() { return this->nbSite; }
     int getNbHabitants() { return this->nbHabitants; }
@@ -41,7 +44,7 @@ public:
     int getNbVelo() { return this->nbVelo; }
     Site** getSites() { return this->arrSites; }
     int getNbVelosAtDepot() { return this->nbVelosAtDepot; }
-    void incrementVelosAtSite(Site* site);
+    void addVelosAtSite(int nbVelos, Site* site);
 
     //setters
     void setNbVelosAtDepot(int velos) { this->nbVelosAtDepot = velos; }
@@ -75,6 +78,10 @@ protected:
     //array to store all threads to start/wait/destroy them with a loop,
     //they are independant after starting so not useful to know which one is what
     QThread** arrThreads;
+
+    //qdebug tools
+    bool displayQDebug;
+    QMutex mutexQDebug;
 
     //static members
     static AlgoThread* algoThread;

@@ -4,7 +4,7 @@
 
 AlgoThread* AlgoThread::algoThread = nullptr;
 
-AlgoThread::AlgoThread(CityWidget* mainWindow,int _nbSite,int _nbHabitants,int _nbBorne,int _nbVelo)
+AlgoThread::AlgoThread(CityWidget* mainWindow,int _nbSite,int _nbHabitants,int _nbBorne,int _nbVelo) : mutexQDebug(), displayQDebug(false)
 {
     AlgoThread::algoThread = this;
 
@@ -37,9 +37,19 @@ AlgoThread::~AlgoThread()
     delete this->arrSites;
 }
 
-void AlgoThread::incrementVelosAtSite(Site *site)
+void AlgoThread::threadSafeQDebug(QString text)
 {
-    site->velosAtSite++;
+    if(this->displayQDebug)
+    {
+        this->mutexQDebug.lock();
+        qDebug() << text;
+        this->mutexQDebug.unlock();
+    }
+}
+
+void AlgoThread::addVelosAtSite(int nbVelos, Site *site)
+{
+    site->velosAtSite += nbVelos;
     emit this->setSiteVelo(site->id, site->velosAtSite);
 }
 
