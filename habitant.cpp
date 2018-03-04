@@ -19,16 +19,13 @@ void Habitant::run()
     AlgoThread* algoThread = AlgoThread::getAlgoThread();
 
     int maxSite = algoThread->getNbSite();
-    int tripTime;
-    int waitTime;
-    int destSiteId;
 
     while(true)
     {
         this->takeVelo(algoThread);
 
-        tripTime = algoThread->getRandomTripTime();
-        waitTime = algoThread->getRandomTripTime();
+        int destSiteId;
+        int tripTime = algoThread->getRandomTripTime();
 
         do
         {
@@ -37,6 +34,7 @@ void Habitant::run()
         }
         while(siteId == destSiteId);
 
+        //move to next site
         algoThread->threadSafeQDebug(QString("Habitant #%1 moving from site #%2 to site #%3").arg(this->id).arg(siteId).arg(destSiteId));
         algoThread->startDeplacement(id, siteId, destSiteId, tripTime);
         this->sleep(tripTime);
@@ -44,10 +42,15 @@ void Habitant::run()
 
         this->dropVelo(algoThread);
 
-        this->sleep(waitTime);
+        //do actions
+        this->sleep(algoThread->getRandomTripTime());
     }
 }
-
+/**
+ * @brief Habitant::dropVelo
+ * drop a velo at a site, if no place available will wait, also notify people who need to take a velo
+ * @param algoThread
+ */
 void Habitant::dropVelo(AlgoThread *algoThread)
 {
     Site* currentSite = algoThread->getSites()[this->siteId];
@@ -63,6 +66,7 @@ void Habitant::dropVelo(AlgoThread *algoThread)
     {
 
         emit algoThread->setHabitantState(this->id, ParamList::WAIT);
+        //if not already in the queue get in the queue
         if(currentSite->dropVeloQueue.indexOf(this->id) == -1)
         {
             currentSite->dropVeloQueue.enqueue(this->id);
@@ -73,6 +77,7 @@ void Habitant::dropVelo(AlgoThread *algoThread)
         currentSite->conditionArrive.wait(&currentSite->mutex);
     }
 
+    //if in the queue, dequeue
     if(!currentSite->dropVeloQueue.isEmpty() && currentSite->dropVeloQueue.head() == this->id)
     {
         currentSite->dropVeloQueue.dequeue();
@@ -81,13 +86,18 @@ void Habitant::dropVelo(AlgoThread *algoThread)
 
     algoThread->threadSafeQDebug(QString("Habitant #%1 dropped velo at site #%2 velo remaining : %3").arg(this->id).arg(currentSite->id).arg(currentSite->velosAtSite));
 
-    currentSite->conditionLeave.notify_all();
-
     currentSite->mutex.unlock();
+
+    //notify people that are waiting to take a bike that a bike is available
+    currentSite->conditionLeave.notify_all();
 
     emit algoThread->setHabitantState(id, ParamList::ACTION);
 }
-
+/**
+ * @brief Habitant::takeVelo
+ * take a velo at a site, if no velo available will wait, also notify people who need to drop a velo
+ * @param algoThread
+ */
 void Habitant::takeVelo(AlgoThread *algoThread)
 {
     Site* currentSite = algoThread->getSites()[this->siteId];
@@ -102,6 +112,7 @@ void Habitant::takeVelo(AlgoThread *algoThread)
               && currentSite->takeVeloQueue.head() != this->id))
     {
         emit algoThread->setHabitantState(this->id, ParamList::WAIT);
+        //if not already in the queue get in the queue
         if(currentSite->takeVeloQueue.indexOf(this->id) == -1)
         {
             currentSite->takeVeloQueue.enqueue(this->id);
@@ -111,17 +122,21 @@ void Habitant::takeVelo(AlgoThread *algoThread)
         currentSite->conditionLeave.wait(&currentSite->mutex);
     }
 
+    //if in the queue, dequeue
     if(!currentSite->takeVeloQueue.isEmpty() && currentSite->takeVeloQueue.head() == this->id)
     {
         currentSite->takeVeloQueue.dequeue();
     }
+    //take a bike
     algoThread->addVelosAtSite(-1, currentSite);
 
     algoThread->threadSafeQDebug(QString("Habitant #%1 took velo at site #%2 velo remaining : %3").arg(this->id).arg(currentSite->id).arg(currentSite->velosAtSite));
 
+    currentSite->mutex.unlock();
+
+    //notify people that are waiting to drop a velo that a free space is available
     currentSite->conditionArrive.notify_all();
 
-    currentSite->mutex.unlock();
 
     emit algoThread->setHabitantState(id, ParamList::BIKE);
 }
