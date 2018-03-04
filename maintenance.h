@@ -13,7 +13,7 @@ protected:
     void run() override;
 
     void setNextSite();
-    int takeFromDepot();
+    void takeFromDepot();
     void dropAtDepot();
     void updateDepot(int nbVelosInDepot);
 

@@ -25,6 +25,7 @@ void Maintenance::run()
 3. Vider la camionnette D <- D + a.
 4. Faire une pause.
 */
+    /*
     //depot = -1 if moving from depot, nbSite if moving to depot
     AlgoThread* algo = AlgoThread::getAlgoThread();
 
@@ -51,7 +52,9 @@ void Maintenance::run()
 
         this->dropAtDepot();
         this->sleep(this->breakTime);
-    }
+    }*/
+
+    work();
 }
 
 /**
@@ -67,7 +70,7 @@ void Maintenance::setNextSite()
  * @brief Maintenance::takeFromDepot
  * take the right amount of velos from the depo
  */
-int Maintenance::takeFromDepot()
+void Maintenance::takeFromDepot()
 {
     AlgoThread* algo = AlgoThread::getAlgoThread();
     int nbVelosAtDepot = algo->getNbVelosAtDepot();
@@ -76,8 +79,6 @@ int Maintenance::takeFromDepot()
     emit algo->setCamVelo(this->nbVelosInCam);
 
     this->updateDepot(nbVelosAtDepot-nbVelosTaken);
-
-    return nbVelosTaken;
 }
 
 /**
@@ -109,12 +110,10 @@ void Maintenance::work()
     AlgoThread* algoThread = AlgoThread::getAlgoThread();
     int nbSites = algoThread->getNbSite();
     int nbVelosDepot;
-    int nbVelosCamion;
 
     while(true)
     {
         nbVelosDepot = algoThread->getNbVelosAtDepot();
-        nbVelosCamion = takeFromDepot();
 
         for(int i = 0;i < nbSites; i++)
         {
@@ -128,24 +127,27 @@ void Maintenance::work()
             // take cycles from the site
             if(nbVelosSite > nbBornes - 2)
             {
-                int c = min(nbVelosDepot - (nbBornes - 2), 4 - nbVelosCamion);
+                int c = min(nbVelosDepot - (nbBornes - 2), 4 - nbVelosInCam);
 
-                currentSite->velosAtSite -= c;
+                algoThread->addVelosAtSite(-c, currentSite);
 
-                nbVelosCamion += nbBornes;
+                nbVelosInCam += c;
             }
             // drop cycles to the site
             else if(nbVelosSite < nbBornes - 2)
             {
-                int c = min((nbBornes - 2) - nbVelosSite, nbVelosCamion);
+                int c = min((nbBornes - 2) - nbVelosSite, nbVelosInCam);
 
-                currentSite->velosAtSite += c;
+                algoThread->addVelosAtSite(c, currentSite);
 
-                nbVelosCamion -= nbBornes;
+                nbVelosInCam -= c;
             }
 
             // SAFE ZONE
             currentSite->mutex.unlock();
+
+            // update count of cycles in the truck
+            emit algoThread->setCamVelo(this->nbVelosInCam);
 
             // animation to next site
             int tripTime = AlgoThread::getRandomTripTime();
@@ -161,10 +163,10 @@ void Maintenance::work()
         this->sleep(tripTime);
 
         // no protection is needed here, cause the maintenance is the only thread who threats this info
-        nbVelosDepot += nbVelosCamion;
+        nbVelosDepot += nbVelosInCam;
         updateDepot(nbVelosDepot);
 
         // wait
-        this->sleep(5000);
+        this->sleep(this->breakTime);
     }
 }
