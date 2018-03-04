@@ -67,7 +67,7 @@ void Maintenance::setNextSite()
  * @brief Maintenance::takeFromDepot
  * take the right amount of velos from the depo
  */
-void Maintenance::takeFromDepot()
+int Maintenance::takeFromDepot()
 {
     AlgoThread* algo = AlgoThread::getAlgoThread();
     int nbVelosAtDepot = algo->getNbVelosAtDepot();
@@ -76,6 +76,8 @@ void Maintenance::takeFromDepot()
     emit algo->setCamVelo(this->nbVelosInCam);
 
     this->updateDepot(nbVelosAtDepot-nbVelosTaken);
+
+    return nbVelosTaken;
 }
 
 /**
@@ -100,4 +102,69 @@ void Maintenance::updateDepot(int nbVelosInDepot)
     AlgoThread* algo = AlgoThread::getAlgoThread();
     algo->setNbVelosAtDepot(nbVelosInDepot);
     emit algo->setDepotVelo(nbVelosInDepot);
+}
+
+void Maintenance::work()
+{
+    AlgoThread* algoThread = AlgoThread::getAlgoThread();
+    int nbSites = algoThread->getNbSite();
+    int nbVelosDepot;
+    int nbVelosCamion;
+
+    while(true)
+    {
+        nbVelosDepot = algoThread->getNbVelosAtDepot();
+        nbVelosCamion = takeFromDepot();
+
+        for(int i = 0;i < nbSites; i++)
+        {
+            Site* currentSite = algoThread->getSites()[i];
+            int nbBornes = algoThread->getNbBorne();
+
+            // DANGER ZONE !
+            currentSite->mutex.lock();
+            int nbVelosSite = currentSite->velosAtSite;
+
+            // take cycles from the site
+            if(nbVelosSite > nbBornes - 2)
+            {
+                int c = min(nbVelosDepot - (nbBornes - 2), 4 - nbVelosCamion);
+
+                currentSite->velosAtSite -= c;
+
+                nbVelosCamion += nbBornes;
+            }
+            // drop cycles to the site
+            else if(nbVelosSite < nbBornes - 2)
+            {
+                int c = min((nbBornes - 2) - nbVelosSite, nbVelosCamion);
+
+                currentSite->velosAtSite += c;
+
+                nbVelosCamion -= nbBornes;
+            }
+
+            // SAFE ZONE
+            currentSite->mutex.unlock();
+
+            // animation to next site
+            int tripTime = AlgoThread::getRandomTripTime();
+            emit algoThread->startCamionDeplacement(this->position, i, tripTime);
+            this->position = i;
+            this->sleep(tripTime);
+        }
+
+        // animation to depot
+        int tripTime = AlgoThread::getRandomTripTime();
+        emit algoThread->startCamionDeplacement(this->position, algoThread->getNbSite(), tripTime);
+        this->position = this->idDepot;
+        this->sleep(tripTime);
+
+        // no protection is needed here, cause the maintenance is the only thread who threats this info
+        nbVelosDepot += nbVelosCamion;
+        updateDepot(nbVelosDepot);
+
+        // wait
+        this->sleep(5000);
+    }
 }
