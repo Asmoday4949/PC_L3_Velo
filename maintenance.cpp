@@ -111,6 +111,8 @@ void Maintenance::work()
     int nbSites = algoThread->getNbSite();
     int nbVelosDepot;
 
+    this->position = this->idDepot;
+
     while(true)
     {
         nbVelosDepot = algoThread->getNbVelosAtDepot();
@@ -133,8 +135,9 @@ void Maintenance::work()
 
                 nbVelosInCam += c;
             }
+
             // drop cycles to the site
-            else if(nbVelosSite < nbBornes - 2)
+            if(nbVelosSite < nbBornes - 2)
             {
                 int c = min((nbBornes - 2) - nbVelosSite, nbVelosInCam);
 
