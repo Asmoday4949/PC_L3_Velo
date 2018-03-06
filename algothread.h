@@ -57,7 +57,7 @@ public:
 
 protected:
     //logic function
-    void setVeloPerBorne(int velos);
+    void setVelosPerSite(int velos);
     void setVelosAtDepot(int velos);
 
     //threads related funcitons

@@ -96,11 +96,11 @@ int AlgoThread::getRandomValue(int max)
 }
 
 /**
- * @brief AlgoThread::setVeloPerBorne
+ * @brief AlgoThread::setVeloPerSite
  * set X velos for each borne
  * @param velos
  */
-void AlgoThread::setVeloPerBorne(int velos)
+void AlgoThread::setVelosPerSite(int velos)
 {
     for(int i = 0; i < this->nbSite; i++)
     {
@@ -122,7 +122,7 @@ void AlgoThread::setVelosAtDepot(int velos)
 void AlgoThread::run()
 {
     this->initSites();
-    this->setVeloPerBorne(this->nbBorne-2);
+    this->setVelosPerSite(this->nbBorne-2);
     this->setVelosAtDepot(this->nbVelo - (this->nbBorne-2)*this->nbSite);
 
     this->arrThreads = new QThread*[this->nbHabitants+1];
