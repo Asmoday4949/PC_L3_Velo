@@ -34,5 +34,10 @@ Un widget à été créé pour demandé à l'utilisateurs les divers argument ->
 Tout ce qui était dans MainWindow à la base a été déplacé dans CityWidget
 MainWindow n'est plus qu'un QWidget avec un stacklayout qui va gérer la transition des données de InitWidget à CityWidget
 
+## Tests
+
+Le programme a été testé en affichant toutes les modifications dans les sites et en vérifiant que le total de vélo à chaque site et les déplacement de habitants de site à site était correcte. Nous avons également vérifié que les queues fonctionnement bien correctement que les personnes "sorte" de l'attente dans l'ordre.
+
+Il est possible d'afficher les déplacement et modification de total de vélo à chaque site en changeant le booléen displayQDebug dans le constructeur en le mettant à true
 
 
