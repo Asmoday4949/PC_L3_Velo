@@ -4,7 +4,7 @@
 
 AlgoThread* AlgoThread::algoThread = nullptr;
 
-AlgoThread::AlgoThread(CityWidget* mainWindow,int _nbSite,int _nbHabitants,int _nbBorne,int _nbVelo) : displayQDebug(false), mutexQDebug()
+AlgoThread::AlgoThread(CityWidget* mainWindow,int _nbSite,int _nbHabitants,int _nbBorne,int _nbVelo) : displayQDebug(true), mutexQDebug()
 {
     AlgoThread::algoThread = this;
 

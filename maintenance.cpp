@@ -113,7 +113,7 @@ void Maintenance::work()
 {
     AlgoThread* algoThread = AlgoThread::getAlgoThread();
     int nbSites = algoThread->getNbSite();
-    int nbVelosDepot;
+    int nbVelosDepot = 0;
 
     this->position = this->idDepot;
 

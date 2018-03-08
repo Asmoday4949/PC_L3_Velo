@@ -18,12 +18,18 @@ struct Site
         this->id = id;
     }
 
+    //id, same id as the graphical site
     int id;
+    // velo counter
     int velosAtSite;
+    // Condition for people who want to drop a velo
     QWaitCondition conditionArrive;
+    // Condition for people who want to take a velo
     QWaitCondition conditionLeave;
     QMutex mutex;
+    //Queue working with conditionArrive
     QQueue<int> dropVeloQueue;
+    //Queue working with conditionLeave
     QQueue<int> takeVeloQueue;
 };
 
