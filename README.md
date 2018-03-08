@@ -9,10 +9,10 @@
 4. Une fois arrivé, ils déposent leur vélo
 
 5. S'il n'y a plus de vélo
-	5.1 Ils vont entrer dans la queue en attendant qu'un vélo soit disponible (conservation de la priorité d'arrivée).
+	- Ils vont entrer dans la queue en attendant qu'un vélo soit disponible (conservation de la priorité d'arrivée).
 
 6. S'il n'y a plus de borne libre
-	6.1 Ils vont entrer dans une autre queue en attendant qu'une borne se libère (conservation de la priorité d'arrivée).
+	- Ils vont entrer dans une autre queue en attendant qu'une borne se libère (conservation de la priorité d'arrivée).
 
 
 Les habitants sont représentés par la classe "Habitant".
