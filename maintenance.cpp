@@ -143,7 +143,9 @@ void Maintenance::work()
             {
                 nbVelo = min(nbVelosSite - (nbBornes - 2), 4 - nbVelosInCam);
 
+
                 currentSite->velosAtSite -= nbVelo;
+                algoThread->threadSafeQDebug(QString("Maintenance taking velos at site #%1, %2 velos,  velos remaining : %3").arg(currentSite->id).arg(nbVelo).arg(currentSite->velosAtSite));
                 nbVelosInCam += nbVelo;
             }
 
@@ -153,6 +155,8 @@ void Maintenance::work()
                 nbVelo = min((nbBornes - 2) - nbVelosSite, nbVelosInCam);
 
                 currentSite->velosAtSite += nbVelo;
+                algoThread->threadSafeQDebug(QString("Maintenance dropping velos at site #%1, %2 velos,  velos remaining : %3").arg(currentSite->id).arg(nbVelo).arg(currentSite->velosAtSite));
+
                 nbVelosInCam -= nbVelo;
             }
 
