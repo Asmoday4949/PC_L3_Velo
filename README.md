@@ -39,5 +39,5 @@ Le programme a été testé en affichant toutes les modifications dans les sites
 des habitants de site à site soient également justes.
 Nous avons également vérifié que les queues fonctionnement correctement. C'est-à-dire que les personnes "sortent" de l'attente dans l'ordre de leur arrivée.
 
-Il est possible d'afficher les logs du programme les déplacement et modifications du total de vélos à chaque site en modifiant le booléen "displayQDebug" 
-qui est initialisé dans le constructeur de la classe "AlgoThread".
+Il est possible d'afficher les déplacement et modifications du total de vélos à chaque site en modifiant le booléen "displayQDebug" 
+qui est initialisé dans le constructeur de la classe "AlgoThread" (log console).
